@@ -1,0 +1,38 @@
+; Moglabs XRF synthesizer advanced table mode script
+; https://chatgpt.com/share/67cb67f9-9684-8005-a672-324c26cfa8fe
+; recommended to set to ASCII encoding (a subset of UTF-8) and CRLF line endings.
+
+; Set Channel 1 to advanced table mode (TPA)
+MODE,1,TPA
+
+; Set the initial fixed parameters for Channel 1
+FREQ,1,100MHz
+POW,1,26dBm
+PHAS,1,0deg
+
+; Clear any existing table on Channel 1
+TABLE,CLEAR,1
+
+; Entry 1: ; Hold the initial state for 500 µs to ensure output stabilization
+; (highlighted practice is highlighted in the manual)
+TABLE,ENTRY,1,500,100MHz,26dBm,0deg
+
+; Arm the table to wait for an external trigger on a rising edge
+TABLE,ARM,1,EXT,RISE
+
+; Define the sweep entries approximating the sin² profile
+TABLE,ENTRY,2,1000,100.0MHz,26dBm,0deg,100.49MHz,26dBm,0deg
+TABLE,ENTRY,3,1000,100.49MHz,26dBm,0deg,101.91MHz,26dBm,0deg
+TABLE,ENTRY,4,1000,101.91MHz,26dBm,0deg,104.12MHz,26dBm,0deg
+TABLE,ENTRY,5,1000,104.12MHz,26dBm,0deg,106.91MHz,26dBm,0deg
+TABLE,ENTRY,6,1000,106.91MHz,26dBm,0deg,110.00MHz,26dBm,0deg
+TABLE,ENTRY,7,1000,110.00MHz,26dBm,0deg,113.09MHz,26dBm,0deg
+TABLE,ENTRY,8,1000,113.09MHz,26dBm,0deg,115.88MHz,26dBm,0deg
+TABLE,ENTRY,9,1000,115.88MHz,26dBm,0deg,118.09MHz,26dBm,0deg
+TABLE,ENTRY,10,1000,118.09MHz,26dBm,0deg,119.51MHz,26dBm,0deg
+TABLE,ENTRY,11,1000,119.51MHz,26dBm,0deg,120.00MHz,26dBm,0deg
+
+; Enable auto‑restart so that once the sequence finishes, the table automatically re‑arms for the next trigger
+TABLE,RESTART,1,ON
+
+; (Optional) To completely reset the table’s internal state after execution, you could issue a reset command. ; This is different from re‑arming: a reset clears internal counters and pointers, returning the table ; to its initial idle state. If supported, it might look like: ; TABLE,RESET,1
