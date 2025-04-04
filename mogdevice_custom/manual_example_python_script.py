@@ -1,7 +1,7 @@
 #======================================
 # XRF python example, (c) MOGLabs 2016
 #======================================
-from mogdevice_dummy import MOGDevice # dummy MOGDevice for code test
+from mogdevice_custom.mogdevice_dummy import MOGDevice # dummy MOGDevice for code test
 # from mogdevice import MOGDevice
 
 # connect to the device

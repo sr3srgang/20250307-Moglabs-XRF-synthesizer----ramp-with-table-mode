@@ -1,0 +1,9 @@
+Booklet 1
+129,ii,i,v-viii,1-28 -- parts of headings, intro, wire connections, on-unit controls, communication protocols, MOGRP software,
+
+Booklet 2
+129, 53-88 -- Simple & advanced table modes
+
+Booklet 3
+129,41-52,89-93,95,96,104-107,115-124 -- Digital I/O (wiring, capability, configurations, examples), parts of appendices (spec, firmware upgrades, table-mode command ref, code example, trouble shooting, low-freq output)
+

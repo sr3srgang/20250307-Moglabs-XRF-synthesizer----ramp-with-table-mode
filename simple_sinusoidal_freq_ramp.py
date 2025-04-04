@@ -3,7 +3,7 @@
 # (c) MOGLabs Example (adapted)
 #======================================
 
-from mogdevice_dummy import MOGDevice # dummy MOGDevice for code test
+from mogdevice_custom.mogdevice_dummy import MOGDevice # dummy MOGDevice for code test
 # from mogdevice import MOGDevice
 
 # Connect to the device

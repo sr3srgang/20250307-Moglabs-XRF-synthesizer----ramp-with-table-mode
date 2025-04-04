@@ -29,16 +29,20 @@ class MOGDevice(BaseMOGDevice):
         """
         print("Sending script to device:")
         print(script_text)
-        for line in script_text.strip().splitlines():
+        commands = script_text.strip().splitlines()
+        responses = [None]*len(commands)
+        for ic, line in enumerate(commands):
             command = line.strip()
             if not command or command.startswith(';'):
                 continue  # Skip empty lines and comments
             response = self.cmd(command)
-            print("Sent:", command, "Response:", response)
+            responses[ic] = response
+            # print("Command:", command, "\n\tResponse:", response)
+        return commands, responses
         
         # Optionally dump the binary table to verify that it was programmed correctly.
-        binary_table = self.ask_bin('TABLE,DUMP,1')
-        print("Binary table length:", len(binary_table))
+        # binary_table = self.ask_bin('TABLE,DUMP,1')
+        # print("Binary table length:", len(binary_table))
 
     def send_file(self, script_file_path):
         """
@@ -53,8 +57,8 @@ class MOGDevice(BaseMOGDevice):
             print(f"Error reading script file: {e}")
             return
 
-        print("Loaded script from", script_file_path)
-        self.send_script(script_text)
+        # print("Loaded script from", script_file_path)
+        return self.send_script(script_text)
 
 
 class MOGDevice_dummy(BaseMOGDevice):
@@ -90,14 +94,40 @@ if __name__ == '__main__':
     # For Ethernet connection, use the device IP (e.g., '10.1.1.23')
     # For USB connection, use the COM port (e.g., 'COM4')
     
-    device_address = '10.1.1.23'
+    device_address = '10.1.1.190'
+    print("Connecting to device...", end=" ")
     dev = MOGDevice(device_address)
+    print("Done.")
     # Print device info for confirmation
-    print("Device info:", dev.ask('info'))
+    print("\tDevice info:", dev.ask('info'))
+    print()
 
+    # Program the device using a script string
+    base_freq = 110e6  # Hz; 110 MHz
+    power = 30  # 30 dBm
+    template_script = \
+"""
+MODE,1,NSB
+FREQ,1,{base_freq}Hz
+POW,1,{power}dBm
+ON,1
+"""
+    script = template_script.format(base_freq=base_freq,power=power)  # Example frequency
+
+    print("Sending script:")
+    print(script)
+    print()
+    
+    commands, responses = dev.send_script(script)
+    print("Script sent:")
+    for ic in range(len(commands)):
+        print("Command:", commands[ic])
+        print("\tResponse:", responses[ic])
+    print()
+    
     # Program the device using the script file
-    script_file = "simple_sinusoidal_freq_ramp.atm"
-    dev.send_file(script_file)
+    # script_file = "simple_sinusoidal_freq_ramp.atm"
+    # dev.send_file(script_file)
 
     # Close the device connection when done
     dev.close()
